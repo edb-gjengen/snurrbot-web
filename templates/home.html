@@ -1,7 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
 {% if entries %}
-    <ul>
-    {%for entry in entries %}
-        <li>{{ entry }}</li>
+    <table>
+        <thead>
+            <th>Hvem</th> 
+            <th>Når</th> 
+            <th>Hva</th> 
+        </thead>
+    {%for entry in entries.object_list %}
+        <tr>
+            <td>{{ entry.user }}</td>
+            <td>{{ entry.created|timesince }}</td>
+            <td>{{ entry.text }}</td>
+        </tr>
     {%endfor%}
-    </ul>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if entries.has_previous %}
+                <a href="?page={{ entries.previous_page_number }}">forrige</a>
+            {% endif %}
+
+            <span class="current">
+                Side {{ entries.number }} av {{ entries.paginator.num_pages }}.
+            </span>
+
+            {% if entries.has_next %}
+                <a href="?page={{ entries.next_page_number }}">neste</a>
+            {% endif %}
+        </span>
+    </div>
 {%endif%}
+{% endblock %}
