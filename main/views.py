@@ -21,6 +21,4 @@ def home(request):
     except (EmptyPage, InvalidPage):
         entries = paginator.page(paginator.num_pages)
 
-    print entries.__dict__
-
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
