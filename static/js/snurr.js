@@ -55,7 +55,7 @@ $(document).ready(function() {
         },
         series: []
     };
-    var url = 'http://localhost:8000/log/';
+    var url = '/log/';
     $.getJSON(url, function(data) {
         $.each(data, function(user, val) {
 

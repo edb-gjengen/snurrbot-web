@@ -29,11 +29,13 @@ def home(request):
 
 def log(request):
     entry_list = Entry.objects.raw("SELECT id, user, COUNT( * ) as entries, DATE( created ) AS date FROM `main_entry` GROUP BY user, DATE( created )")
-    start = datetime.strptime(min(entry_list).date, '%Y-%m-%d')
-    entry_list = [ (e.user,e.date,e.entries) for e in entry_list]
+    if isinstance(entry_list[0].date, unicode):
+        entry_list = [ (e.user,e.date,e.entries) for e in entry_list]
+    else:
+        # In Django trunk dates in raw queries are recognized and converted to datetime objects
+        entry_list = [ (e.user,e.date.strftime("%Y-%m-%d"),e.entries) for e in entry_list]
     #LORD!
     per_user = {}
-    i = 0
     for user, date, es in entry_list:
         data = (date, es)
 
