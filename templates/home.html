@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+<h2>Driftslogg</h2>
 {% if entries %}
-    <h2>Driftslogg</h2>
     <table>
         <thead>
             <th>Hvem</th> 
@@ -31,10 +31,17 @@
             {% endif %}
         </span>
     </div>
+{% else %}
+Ingenting i loggen.
 {%endif%}
 <div id="admin">
     <p>
-        <a href="/admin">Oops, jeg skrev feil...</a>
+        <a href="/admin">Oops, jeg skrev noe feil...</a>
     </p>
 </div>
+{% if entries.number = 1 %}
+<div id="stats">
+        <div id="container" style="width: 800px; height: 400px; margin: 0 auto;"></div> 
+</div>
+{% endif %}
 {% endblock %}
