@@ -1,9 +1,13 @@
+import simplejson as json
+from datetime import datetime
+
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
-from main.models import *
+from snurrweb.main.models import *
 
 def home(request):
     entry_list = Entry.objects.all().order_by('created').reverse()
@@ -21,6 +25,24 @@ def home(request):
     except (EmptyPage, InvalidPage):
         entries = paginator.page(paginator.num_pages)
 
-    print entries.__dict__
-
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
+
+def log(request):
+    entry_list = Entry.objects.raw("SELECT id, user, COUNT( * ) as entries, DATE( created ) AS date FROM `main_entry` GROUP BY user, DATE( created )")
+    start = datetime.strptime(min(entry_list).date, '%Y-%m-%d')
+    entry_list = [ (e.user,e.date,e.entries) for e in entry_list]
+    #LORD!
+    per_user = {}
+    i = 0
+    for user, date, es in entry_list:
+        data = (date, es)
+
+        if user in per_user:
+            # sum up data
+            data = (data[0], per_user[user][-1:][0][1] + data[1])
+            per_user[user].append(data)
+        else:
+            per_user[user] = []
+            per_user[user].append(data)
+
+    return HttpResponse(json.dumps(per_user), content_type='application/javascript; charset=utf8')

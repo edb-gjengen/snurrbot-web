@@ -1,4 +1,4 @@
 from django.contrib import admin
-from main.models import *
+from snurrweb.main.models import *
 
 admin.site.register(Entry)

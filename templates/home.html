@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<h2>Driftslogg</h2>
 {% if entries %}
     <table>
         <thead>
@@ -18,7 +19,7 @@
     <div class="pagination">
         <span class="step-links">
             {% if entries.has_previous %}
-                <a href="?page={{ entries.previous_page_number }}">forrige</a>
+                <a href="?page={{ entries.previous_page_number }}">Forrige</a>
             {% endif %}
 
             <span class="current">
@@ -26,9 +27,21 @@
             </span>
 
             {% if entries.has_next %}
-                <a href="?page={{ entries.next_page_number }}">neste</a>
+                <a href="?page={{ entries.next_page_number }}">Neste</a>
             {% endif %}
         </span>
     </div>
+{% else %}
+Ingenting i loggen.
 {%endif%}
+<div id="admin">
+    <p>
+        <a href="/admin">Oops, jeg skrev noe feil...</a>
+    </p>
+</div>
+{% if entries.number = 1 %}
+<div id="stats">
+        <div id="container" style="width: 800px; height: 400px; margin: 0 auto;"></div> 
+</div>
+{% endif %}
 {% endblock %}
