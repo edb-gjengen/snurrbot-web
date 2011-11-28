@@ -56,11 +56,15 @@ $(document).ready(function() {
     };
     var url = '/log/';
     $.getJSON(url, function(data) {
+        var max = 0;
         $.each(data, function(user, val) {
 
             // convert to unixtime and fill lines array.
             var line = [];
             $.each(val, function(i, num) {
+                if(num[1] > max) {
+                    max = num[1];
+                }
                 line[i] = new Array(Date.parse(num[0]), num[1]);
             });
             options.series.push({
@@ -72,6 +76,7 @@ $(document).ready(function() {
                 data: line
             });
         });
+        options.yAxis.max = max + 5;
         chart = new Highcharts.Chart(options);
     });
 });
