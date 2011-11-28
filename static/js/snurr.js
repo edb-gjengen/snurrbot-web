@@ -22,7 +22,6 @@ $(document).ready(function() {
                 text: 'Number of log entries'
             },
             min: 0,
-            max: 40 
         },
         legend: {
             borderWidth: 0
