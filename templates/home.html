@@ -2,6 +2,9 @@
 {% block content %}
 <h2>Driftslogg</h2>
 {% if entries %}
+    {% if request.GET.who %}
+        <a href="/">Vis alle</a>
+    {% endif %}
     <table>
         <thead>
             <th>Hvem</th> 
@@ -10,16 +13,24 @@
         </thead>
     {%for entry in entries.object_list %}
         <tr>
-            <td>{{ entry.user }}</td>
+            <td>{% if request.GET.who != entry.user %}
+                    <a href="?who={{ entry.user }}">{{ entry.user }}</a>
+                {% else %}
+                    {{ entry.user }}
+                {%endif%}</td>
             <td>{{ entry.created|timesince }}</td>
-            <td>{{ entry.text }}</td>
+            <td>{{ entry.text|urlize }}</td>
         </tr>
     {%endfor%}
     </table>
     <div class="pagination">
         <span class="step-links">
             {% if entries.has_previous %}
-                <a href="?page={{ entries.previous_page_number }}">Forrige</a>
+                {% if request.GET.who %}
+                    <a href="?page={{ entries.previous_page_number }}&who={{ request.GET.who }}">Forrige</a>
+                {% else %}
+                    <a href="?page={{ entries.previous_page_number }}">Forrige</a>
+                {% endif %}
             {% endif %}
 
             <span class="current">
@@ -27,7 +38,11 @@
             </span>
 
             {% if entries.has_next %}
-                <a href="?page={{ entries.next_page_number }}">Neste</a>
+                {% if request.GET.who %}
+                    <a href="?page={{ entries.next_page_number }}&who={{ request.GET.who }}">Forrige</a>
+                {% else %}
+                    <a href="?page={{ entries.next_page_number }}">Forrige</a>
+                {% endif %}
             {% endif %}
         </span>
     </div>

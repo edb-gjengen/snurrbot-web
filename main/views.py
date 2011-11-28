@@ -10,8 +10,12 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from models import *
 
 def home(request):
-    entry_list = Entry.objects.all().order_by('created').reverse()
-    paginator = Paginator(entry_list, 10) # Show 25 entries per page
+    filter_who = request.GET.get('who')
+    if filter_who:
+        entry_list = Entry.objects.filter(user=filter_who).order_by('created').reverse()
+    else:
+        entry_list = Entry.objects.all().order_by('created').reverse()
+    paginator = Paginator(entry_list, 10) # Show 10 entries per page
 
     # Make sure page request is an int. If not, deliver first page
     try:
